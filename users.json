@@ -1,0 +1,10 @@
+[
+    {
+        "username": "dsr",
+        "enc_password": "$2b$10$ku018UGzi6AVafv7/9XPXewGE2TVlVKfqGkx.BlanL6LY1AjcUrwK"
+    },
+    {
+        "username": "admin",
+        "enc_password": "$2b$10$jbtjw3HeGbEHzr3xe6OIQ.9.LdK2pMFfBQBh/1PziiGrHIBL/Cq3W"
+    }
+]
