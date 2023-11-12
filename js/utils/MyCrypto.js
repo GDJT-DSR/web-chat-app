@@ -21,12 +21,12 @@ function createCipher(enckey, pad) {
     console.log(randStr, aeskey.toString('hex'));
     return {
         encrypt: function (data) {
-            var cipher = cryptoObj.createCipheriv('aes-256-cbc', aeskey, '0102030405060708');
+            var cipher = cryptoObj.createCipheriv('aes-128-cbc', aeskey, '0102030405060708');
             cipher.setAutoPadding(true);
             return cipher.update(data, 'utf-8', 'base64') + cipher.final('base64');
         },
         decrypt: function (data) {
-            var decipher = cryptoObj.createDecipheriv('aes-256-cbc', aeskey, '0102030405060708');
+            var decipher = cryptoObj.createDecipheriv('aes-128-cbc', aeskey, '0102030405060708');
             decipher.setAutoPadding(true);
             return decipher.update(data, 'base64', 'utf-8') + decipher.final('utf-8');
         },

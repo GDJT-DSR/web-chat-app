@@ -113,7 +113,7 @@ function saveinFile() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fse.writeJson(messagePath, filejson, {
-                        spaces: 2,
+                    // spaces: 2,
                     })];
                 case 1:
                     _a.sent();
