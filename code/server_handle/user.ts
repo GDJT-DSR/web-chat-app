@@ -12,36 +12,46 @@ const users = fse.readJSONSync(path.join(__dirname, '../../users.json')) as User
 
 const router = express.Router();
 
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
     const { username, password, enckey } = req.body;
 
-    try {
-        const cipher = createCipher(enckey, '');
-        const decryptedPassword = cipher.decrypt(password);
-        const decryptUserName = cipher.decrypt(username);
-        for (let user of users) {
-            if (user.username === decryptUserName && // 用户名匹配
-                // 验证密码信息
-                (await bcrypt.compare(decryptedPassword, user.enc_password))) {
-                let token = jwt.sign({
-                    username: user.username,
-                }, secretKey, {
-                    expiresIn: '10h',
-                })
-                return res.json({
-                    code: 0,
-                    msg: '登录成功',
-                    token,
-                })
-            }
-        }
-    } catch (e) {
-        res.json({
-            code: 1,
-            msg: (<Error>e).message,
-        })
-    }
 
+    const cipher = createCipher(enckey, '');
+    const decryptedPassword = cipher.decrypt(password);
+    const decryptUserName = cipher.decrypt(username);
+    for (let user of users) {
+        if (user.username === decryptUserName) {// 用户名匹配
+            // 验证密码信息
+            bcrypt.compare(decryptedPassword, user.enc_password).then(bool => {
+                if (bool) {
+                    let token = jwt.sign({
+                        username: user.username,
+                    }, secretKey, {
+                        expiresIn: '10h',
+
+                    })
+                    res.json({
+                        code: 0,
+                        msg: '登录成功',
+                        token,
+                    })
+                } else {
+                    res.json({
+                        code: 1,
+                        msg: '密码错误',
+                    })
+                }
+            }).catch(e => {
+                try {
+                    res.json({
+                        code: 1,
+                        msg: (<Error>e).message,
+                    })
+                } catch { }
+            })
+            return;
+        }
+    }
 })
 
 router.get('/getuserinfo', (req: JwtRequest, res: express.Response) => {
