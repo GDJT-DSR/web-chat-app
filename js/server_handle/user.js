@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var fse = require("fs-extra");
 var path = require("path");
-var MyCrypto_1 = require("../utils/MyCrypto");
+var MyCrypto_1 = require("../../code/utils/MyCrypto");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
-var consts_1 = require("../consts");
+var consts_1 = require("../../code/consts");
 // import { Jwt } from 'jsonwebtoken';
 var users = fse.readJSONSync(path.join(__dirname, '../../users.json'));
 var router = express.Router();
@@ -55,6 +55,10 @@ router.post('/login', function (req, res) {
         if (typeof state_1 === "object")
             return state_1.value;
     }
+    res.json({
+        code: 2,
+        msg: '该用户不存在',
+    });
 });
 router.get('/getuserinfo', function (req, res) {
     res.json({

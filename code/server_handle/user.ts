@@ -52,6 +52,10 @@ router.post('/login', (req, res) => {
             return;
         }
     }
+    res.json({
+        code: 2,
+        msg: '该用户不存在',
+    })
 })
 
 router.get('/getuserinfo', (req: JwtRequest, res: express.Response) => {
