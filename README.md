@@ -1,9 +1,6 @@
 # dsr-chat-app
 这是一个基于node.js的聊天室项目，前端使用vue3-ts，后端使用ts开发。
 
-项目已经在[glitch](https://upbeat-wooded-exoplanet.glitch.me/)上部署，可以访问。
-
-
 
 ## 如何运行？
 
