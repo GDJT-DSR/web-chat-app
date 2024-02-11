@@ -19,20 +19,20 @@ app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 
 // token验证
-app.use('/api/*', expressjwt({
+app.use('/api/chat/*', expressjwt({
     secret: secretKey,
     algorithms: ['HS256']
 }).unless({
     path: [
-        { url: '/api/login' },
-        { url: '/api/getpubkey' },
-        { url: '/api/sse' }
+        { url: '/api/chat/login' },
+        { url: '/api/chat/getpubkey' },
+        { url: '/api/chat/sse' }
     ]
 }))
 
 // 中间件注册
-app.use('/api/', AddMessage, GetMessages, RemoveMessage, User, sse)
-app.get('/api/getpubkey', (_, res) => {
+app.use('/api/chat/', AddMessage, GetMessages, RemoveMessage, User, sse)
+app.get('/api/chat/getpubkey', (_, res) => {
     res.sendFile(path.join(__dirname, '../pem/public.pem'));
 })
 app.use(express.static(path.join(__dirname, '../dist')))
