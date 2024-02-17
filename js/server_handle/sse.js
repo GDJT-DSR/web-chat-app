@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMsg = exports.router = void 0;
-var express = require("express");
+const express = require("express");
 exports.router = express.Router();
-var responses = new Set();
-exports.router.all('/sse', function (req, res) {
+let responses = new Set();
+exports.router.all('/sse', (req, res) => {
     res.set({
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
@@ -12,12 +12,12 @@ exports.router.all('/sse', function (req, res) {
     });
     res.flushHeaders();
     responses.add(res);
-    setTimeout(function () {
+    setTimeout(() => {
         responses.delete(res);
         res.end();
-    }, 3 * Math.pow(10, 5));
+    }, 3 * 10 ** 5);
 });
 function sendMsg(msg) {
-    responses.forEach(function (res) { return res.write("event: message\ndata: ".concat(msg, "\n\n")); });
+    responses.forEach(res => res.write(`event: message\ndata: ${msg}\n\n`));
 }
 exports.sendMsg = sendMsg;

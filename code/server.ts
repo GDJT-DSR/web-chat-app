@@ -8,11 +8,10 @@ import { router as sse } from './server_handle/sse';
 import { expressjwt } from 'express-jwt'
 import { secretKey } from './consts';
 import User from './server_handle/user';
-import * as http from 'http';
 
 const app = express();
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 // 处理json数据
 app.use(bodyParser.json());
@@ -60,13 +59,12 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: Functi
 })
 
 
-// app.listen(PORT, () => {
-//     // console.clear();
-//     console.clear()
-//     console.log(`server is running at http://localhost:${PORT}`);
-// })
-
-http.createServer(app).listen(PORT, () => {
+app.listen(PORT, () => {
     console.clear()
     console.log(`server is running at http://localhost:${PORT}`);
 })
+
+// http.createServer(app).listen(PORT, () => {
+//     console.clear()
+//     console.log(`server is running at http://localhost:${PORT}`);
+// })

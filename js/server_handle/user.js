@@ -1,26 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
-var fse = require("fs-extra");
-var path = require("path");
-var MyCrypto_1 = require("../utils/MyCrypto");
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcrypt");
-var consts_1 = require("../consts");
+const express = require("express");
+const fse = require("fs-extra");
+const path = require("path");
+const MyCrypto_1 = require("../utils/MyCrypto");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const consts_1 = require("../consts");
 // import { Jwt } from 'jsonwebtoken';
-var users = fse.readJSONSync(path.join(__dirname, '../../users.json'));
-var router = express.Router();
-router.post('/login', function (req, res) {
-    var _a = req.body, username = _a.username, password = _a.password, enckey = _a.enckey;
-    var cipher = (0, MyCrypto_1.createCipher)(enckey, '');
-    var decryptedPassword = cipher.decrypt(password);
-    var decryptUserName = cipher.decrypt(username);
-    var _loop_1 = function (user) {
+const users = fse.readJSONSync(path.join(__dirname, '../../users.json'));
+const router = express.Router();
+router.post('/login', (req, res) => {
+    const { username, password, enckey } = req.body;
+    const cipher = (0, MyCrypto_1.createCipher)(enckey, '');
+    const decryptedPassword = cipher.decrypt(password);
+    const decryptUserName = cipher.decrypt(username);
+    for (let user of users) {
         if (user.username === decryptUserName) { // 用户名匹配
             // 验证密码信息
-            bcrypt.compare(decryptedPassword, user.enc_password).then(function (bool) {
+            bcrypt.compare(decryptedPassword, user.enc_password).then(bool => {
                 if (bool) {
-                    var token = jwt.sign({
+                    let token = jwt.sign({
                         username: user.username,
                     }, consts_1.secretKey, {
                         expiresIn: '10h',
@@ -28,7 +28,7 @@ router.post('/login', function (req, res) {
                     res.json({
                         code: 0,
                         msg: '登录成功',
-                        token: token,
+                        token,
                     });
                 }
                 else {
@@ -37,30 +37,24 @@ router.post('/login', function (req, res) {
                         msg: '密码错误',
                     });
                 }
-            }).catch(function (e) {
+            }).catch(e => {
                 try {
                     res.json({
                         code: 1,
                         msg: e.message,
                     });
                 }
-                catch (_a) { }
+                catch { }
             });
-            return { value: void 0 };
+            return;
         }
-    };
-    for (var _i = 0, users_1 = users; _i < users_1.length; _i++) {
-        var user = users_1[_i];
-        var state_1 = _loop_1(user);
-        if (typeof state_1 === "object")
-            return state_1.value;
     }
     res.json({
         code: 2,
         msg: '该用户不存在',
     });
 });
-router.get('/getuserinfo', function (req, res) {
+router.get('/getuserinfo', (req, res) => {
     res.json({
         code: 0,
         msg: '获取成功',

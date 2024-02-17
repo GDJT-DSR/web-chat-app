@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
-var MessageHandle_1 = require("../utils/MessageHandle");
-var MyCrypto_1 = require("../utils/MyCrypto");
-var router = express.Router();
-router.post('/getmsgs', function (req, res) {
-    var _a, _b;
-    var enckey = req.body.enckey;
+const express = require("express");
+const MessageHandle_1 = require("../utils/MessageHandle");
+const MyCrypto_1 = require("../utils/MyCrypto");
+const router = express.Router();
+router.post('/getmsgs', (req, res) => {
+    const { enckey } = req.body;
     if (!enckey) {
         return res.json({
             code: 1,
@@ -14,10 +13,10 @@ router.post('/getmsgs', function (req, res) {
         });
     }
     try {
-        var cipher = (0, MyCrypto_1.createCipher)(enckey, (_a = req.auth) === null || _a === void 0 ? void 0 : _a.username);
-        console.log((_b = req.auth) === null || _b === void 0 ? void 0 : _b.username);
-        var msgs = MessageHandle_1.default.getMessages();
-        var encmsgs = cipher.encrypt(JSON.stringify(msgs));
+        const cipher = (0, MyCrypto_1.createCipher)(enckey, req.auth?.username);
+        console.log(req.auth?.username);
+        let msgs = MessageHandle_1.default.getMessages();
+        let encmsgs = cipher.encrypt(JSON.stringify(msgs));
         res.json({
             code: 0,
             msg: 'ok',
