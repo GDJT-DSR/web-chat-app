@@ -10,6 +10,8 @@
         "node-rsa": "^1.1.1"
     },
     "scripts": {
+        "dev": "ts-node-dev ./code/server.ts",
+        "build": "tsc",
         "start": "node ./js/server.js"
     },
     "devDependencies": {
